@@ -27,6 +27,7 @@ async function bootstrap(): Promise<void> {
     CREATE_TOPIC_TOOL,
     SUBMIT_TOPIC_MESSAGE_TOOL,
     GET_HBAR_BALANCE_QUERY_TOOL,
+    CREATE_ERC20_TOOL,
     // CREATE_NON_FUNGIBLE_TOKEN_TOOL,
     // TRANSFER_HBAR_TOOL,
     // AIRDROP_FUNGIBLE_TOKEN_TOOL,
@@ -44,6 +45,7 @@ async function bootstrap(): Promise<void> {
         SUBMIT_TOPIC_MESSAGE_TOOL,
         CREATE_FUNGIBLE_TOKEN_TOOL,
         GET_HBAR_BALANCE_QUERY_TOOL,
+        CREATE_ERC20_TOOL,
       ], // use an empty array if you wantto load all tools
       context: {
         mode: AgentMode.AUTONOMOUS,

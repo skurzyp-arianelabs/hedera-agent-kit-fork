@@ -7,6 +7,7 @@ import createNonFungibleTokenTool, {
 import createFungibleTokenTool, {
   CREATE_FUNGIBLE_TOKEN_TOOL,
 } from './tools/fungible-token/create-fungible-token';
+import createERC20Tool, { CREATE_ERC20_TOOL } from './tools/erc20/create-erc20';
 import transferHbarTool, { TRANSFER_HBAR_TOOL } from './tools/account/transfer-hbar';
 import airdropFungibleToken, {
   AIRDROP_FUNGIBLE_TOKEN_TOOL,
@@ -36,6 +37,7 @@ export type Tool = {
 
 const tools = (context: Context): Tool[] => [
   createFungibleTokenTool(context),
+  createERC20Tool(context),
   createNonFungibleTokenTool(context),
   transferHbarTool(context),
   airdropFungibleToken(context),
@@ -49,6 +51,7 @@ const tools = (context: Context): Tool[] => [
 
 export const hederaTools = {
   CREATE_FUNGIBLE_TOKEN_TOOL,
+  CREATE_ERC20_TOOL,
   CREATE_NON_FUNGIBLE_TOKEN_TOOL,
   TRANSFER_HBAR_TOOL,
   AIRDROP_FUNGIBLE_TOKEN_TOOL,

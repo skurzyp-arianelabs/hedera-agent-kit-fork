@@ -289,6 +289,7 @@ Please [open an issue](https://github.com/hedera-dev/hedera-agent-kit/issues/new
 - Create a Topic
 - Submit a message to a Topic
 - Create a Fungible Token
+- Create an ERC20 Token
 - Create a Non-Fungible Token
 - Airdrop Fungible Tokens
 - Transfer Fungible Tokens
