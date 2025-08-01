@@ -5,11 +5,14 @@ import {
   TopicMessageSubmitTransaction,
   TransferTransaction,
   ContractExecuteTransaction,
+  TokenMintTransaction,
 } from '@hashgraph/sdk';
 import {
   airdropFungibleTokenParametersNormalised,
   createFungibleTokenParametersNormalised,
   createNonFungibleTokenParametersNormalised,
+  mintFungibleTokenParametersNormalised,
+  mintNonFungibleTokenParametersNormalised,
 } from '@/shared/parameter-schemas/hts.zod';
 import z from 'zod';
 import { transferHbarParametersNormalised } from '@/shared/parameter-schemas/has.zod';
@@ -56,5 +59,17 @@ export default class HederaBuilder {
     params: z.infer<ReturnType<typeof contractExecuteTransactionParametersNormalised>>,
   ) {
     return new ContractExecuteTransaction(params);
+  }
+
+  static mintFungibleToken(
+    params: z.infer<ReturnType<typeof mintFungibleTokenParametersNormalised>>,
+  ) {
+    return new TokenMintTransaction(params);
+  }
+
+  static mintNonFungibleToken(
+    params: z.infer<ReturnType<typeof mintNonFungibleTokenParametersNormalised>>,
+  ) {
+    return new TokenMintTransaction(params);
   }
 }
