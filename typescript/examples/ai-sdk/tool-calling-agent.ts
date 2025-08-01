@@ -14,7 +14,6 @@ async function bootstrap(): Promise<void> {
   );
 
   // Only the four tools
-  // all the available tools
   const {
     CREATE_FUNGIBLE_TOKEN_TOOL,
   } = coreHTSPluginToolNames;
