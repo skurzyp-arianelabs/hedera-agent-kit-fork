@@ -67,8 +67,8 @@ If you already have a **testnet** account, you can use it. Otherwise, you can cr
 
 Add the following to the .env file:
 ```env
-ACCOUNT_ID="0.0.xxxxx" # your operator account ID from https://portal.hedera.com/dashboard
-PRIVATE_KEY="0x..." # ECDSA encoded private key
+HEDERA_ACCOUNT_ID="0.0.xxxxx" # your operator account ID from https://portal.hedera.com/dashboard
+HEDERA_PRIVATE_KEY="0x..." # ECDSA encoded private key
 OPENAI_API_KEY="sk-proj-..." # Create an OpenAPI Key at https://platform.openai.com/api-keys
 ```
 
@@ -103,8 +103,8 @@ async function main() {
 
   // Hedera client setup (Testnet by default)
   const client = Client.forTestnet().setOperator(
-    process.env.ACCOUNT_ID,
-    PrivateKey.fromStringDer(process.env.PRIVATE_KEY),
+    process.env.HEDERA_ACCOUNT_ID,
+    PrivateKey.fromStringDer(process.env.HEDERA_PRIVATE_KEY),
   ); // get these from https://portal.hedera.com
 
   const hederaAgentToolkit = new HederaLangchainToolkit({
