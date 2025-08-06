@@ -24,7 +24,6 @@ async function bootstrap(): Promise<void> {
       context: {
         mode: AgentMode.AUTONOMOUS,
       },
-      plugins: [coreHTSPlugin, coreConsensusPlugin, coreQueriesPlugin],
     },
   });
 

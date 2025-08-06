@@ -22,7 +22,6 @@ Parameters:
 - tokenSymbol (str, required): The symbol of the token
 - decimals (int, optional): The number of decimals the token supports. Defaults to 18
 - initialSupply (int, optional): The initial supply of the token. Defaults to 0
-- factoryContractAddress (str, required): The address of the BaseERC20Factory contract
 ${usageInstructions}
 `;
 };
