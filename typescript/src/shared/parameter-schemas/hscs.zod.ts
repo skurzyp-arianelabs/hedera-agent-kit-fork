@@ -25,8 +25,21 @@ export const createERC20Parameters = (_context: Context = {}) =>
       .number()
       .int()
       .min(0)
-      .max(18)
       .default(18)
       .describe('The number of decimals the token supports.'),
     initialSupply: z.number().int().min(0).default(0).describe('The initial supply of the token.'),
+  });
+
+export const transferERC721Parameters = (_context: Context = {}) =>
+  z.object({
+    contractId: z.string().describe('The id of the ERC721 contract.'),
+    fromAddress: z.string().describe('Address from which the token will be transferred.'),
+    toAddress: z.string().describe('Address to which the token will be transferred.'),
+    tokenId: z.number().describe('The ID of the token to transfer.'),
+  });
+
+export const mintERC721Parameters = (_context: Context = {}) =>
+  z.object({
+    contractId: z.string().describe('The id of the ERC721 contract.'),
+    toAddress: z.string().describe('Address to which the token will be minted.'),
   });

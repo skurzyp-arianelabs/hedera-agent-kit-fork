@@ -14,6 +14,7 @@ import {
   createTopicParameters,
   createTopicParametersNormalised,
 } from '@/shared/parameter-schemas/hcs.zod';
+
 import { Client, Hbar, PublicKey, TokenSupplyType, TokenType } from '@hashgraph/sdk';
 import { Context } from '@/shared/configuration';
 import z from 'zod';
@@ -30,6 +31,8 @@ import { ethers } from 'ethers';
 import {
   createERC20Parameters,
   transferERC20Parameters,
+  transferERC721Parameters,
+  mintERC721Parameters,
 } from '@/shared/parameter-schemas/hscs.zod';
 
 export default class HederaParameterNormaliser {
@@ -326,6 +329,68 @@ export default class HederaParameterNormaliser {
       recipientAddress,
       params.amount,
     ]);
+
+    const functionParameters = ethers.getBytes(encodedData);
+
+    return {
+      contractId,
+      functionParameters,
+      gas: 100_000,
+    };
+  }
+
+  static async normaliseTransferERC721Params(
+    params: z.infer<ReturnType<typeof transferERC721Parameters>>,
+    factoryContractAbi: string[],
+    factoryContractFunctionName: string,
+    _context: Context,
+    mirrorNode: IHederaMirrornodeService,
+  ) {
+    const fromAddress = await HederaParameterNormaliser.getHederaEVMAddress(
+      params.fromAddress,
+      mirrorNode,
+    );
+    const toAddress = await HederaParameterNormaliser.getHederaEVMAddress(
+      params.toAddress,
+      mirrorNode,
+    );
+    const contractId = await HederaParameterNormaliser.getHederaAccountId(
+      params.contractId,
+      mirrorNode,
+    );
+    const iface = new ethers.Interface(factoryContractAbi);
+    const encodedData = iface.encodeFunctionData(factoryContractFunctionName, [
+      fromAddress,
+      toAddress,
+      params.tokenId,
+    ]);
+
+    const functionParameters = ethers.getBytes(encodedData);
+
+    return {
+      contractId,
+      functionParameters,
+      gas: 100_000,
+    };
+  }
+
+  static async normaliseMintERC721Params(
+    params: z.infer<ReturnType<typeof mintERC721Parameters>>,
+    factoryContractAbi: string[],
+    factoryContractFunctionName: string,
+    _context: Context,
+    mirrorNode: IHederaMirrornodeService,
+  ) {
+    const toAddress = await HederaParameterNormaliser.getHederaEVMAddress(
+      params.toAddress,
+      mirrorNode,
+    );
+    const contractId = await HederaParameterNormaliser.getHederaAccountId(
+      params.contractId,
+      mirrorNode,
+    );
+    const iface = new ethers.Interface(factoryContractAbi);
+    const encodedData = iface.encodeFunctionData(factoryContractFunctionName, [toAddress]);
 
     const functionParameters = ethers.getBytes(encodedData);
 
