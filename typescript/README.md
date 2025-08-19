@@ -56,10 +56,10 @@ npm init -y
 npm install hedera-agent-kit @langchain/openai @langchain/core langchain @hashgraph/sdk dotenv
 ```
 
-> You may need to add "type": "module" to your package.json file so that your project allows ES module imports
+> Note: The examples in the `typescript/examples` directory are configured for `"type": "commonjs"`, whereas the quick-start guide below demonstrates an ES module setup. For more information on ES module and CommonJS interoperability, please see the [TypeScript documentation](https://www.typescriptlang.org/docs/handbook/modules/appendices/esm-cjs-interop.html).
 
 ```json
-"name": "hello-hedera-agent-kit",
+  "name": "hello-hedera-agent-kit",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {},
@@ -86,7 +86,7 @@ OPENAI_API_KEY="sk-proj-..." # Create an OpenAPI Key at https://platform.openai.
 
 
 ### 3 – Simple "Hello Hedera Agent Kit" Example
-Create a a new file called `index.js` in the `hello-hedera-agent-kit` folder.
+Create a new file called `index.js` in the `hello-hedera-agent-kit` folder.
 
 ```bash
 touch index.js

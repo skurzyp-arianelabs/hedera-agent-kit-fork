@@ -57,6 +57,8 @@ Init and install with npm
 npm init -y
 ```
 
+> This command initializes a CommonJS project by default.
+
 ```bash
 npm install hedera-agent-kit @langchain/core langchain @hashgraph/sdk dotenv
 ```
