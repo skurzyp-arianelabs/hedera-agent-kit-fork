@@ -34,3 +34,31 @@ export const transferHbarParametersNormalised = (_context: Context = {}) =>
     ),
     transactionMemo: z.string().optional(),
   });
+
+export const createAccountParameters = (_context: Context = {}) =>
+  z.object({
+    agreement: z
+      .string()
+      .describe('You must include exactly: "I understand that this action can be risky."'),
+    keyType: z.enum(['ECDSA', 'ED25519']).describe('Type of key to generate for the new account'),
+    accountMemo: z.string().optional().describe('Optional memo for the account'),
+    initialBalance: z
+      .number()
+      .optional()
+      .default(0)
+      .describe('Initial HBAR balance to fund the account (defaults to 0)'),
+    maxAutomaticTokenAssociations: z
+      .number()
+      .optional()
+      .default(-1)
+      .describe('Max automatic token associations (-1 for unlimited)'),
+  });
+
+// Normalized schema that matches AccountCreateTransaction props
+export const createAccountParametersNormalised = (_context: Context = {}) =>
+  z.object({
+    accountMemo: z.string().optional(),
+    initialBalance: z.union([z.string(), z.number(), z.instanceof(Long), z.instanceof(BigNumber), z.instanceof(Hbar)]).optional(),
+    key: z.any().optional(),
+    maxAutomaticTokenAssociations: z.union([z.number(), z.instanceof(Long)]).optional(),
+  });

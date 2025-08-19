@@ -9,7 +9,11 @@ import {
   mintFungibleTokenParameters,
   mintNonFungibleTokenParameters,
 } from '@/shared/parameter-schemas/hts.zod';
-import { transferHbarParameters } from '@/shared/parameter-schemas/has.zod';
+import {
+  createAccountParameters,
+  createAccountParametersNormalised,
+  transferHbarParameters,
+} from '@/shared/parameter-schemas/has.zod';
 import {
   createTopicParameters,
   createTopicParametersNormalised,
@@ -228,6 +232,25 @@ export default class HederaParameterNormaliser {
       }
       normalised.submitKey = PublicKey.fromString(publicKey);
     }
+
+    return normalised;
+  }
+
+  static normaliseCreateAccount(
+    params: z.infer<ReturnType<typeof createAccountParameters>>,
+    _context: Context,
+    _client: Client,
+    generatedPublicKey: string,
+  ) {
+    const initialBalance = params.initialBalance ?? 0;
+    const maxAssociations = params.maxAutomaticTokenAssociations ?? -1; // sets max auto token associations to unlimited
+
+    const normalised: z.infer<ReturnType<typeof createAccountParametersNormalised>> = {
+      accountMemo: params.accountMemo,
+      initialBalance,
+      key: PublicKey.fromString(generatedPublicKey),
+      maxAutomaticTokenAssociations: maxAssociations,
+    };
 
     return normalised;
   }
