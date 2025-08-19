@@ -56,8 +56,6 @@ npm init -y
 npm install hedera-agent-kit @langchain/openai @langchain/core langchain @hashgraph/sdk dotenv
 ```
 
-> Note: The examples in the `typescript/examples` directory are configured for `"type": "commonjs"`, whereas the quick-start guide below demonstrates an ES module setup. For more information on ES module and CommonJS interoperability, please see the [TypeScript documentation](https://www.typescriptlang.org/docs/handbook/modules/appendices/esm-cjs-interop.html).
-
 ```json
   "name": "hello-hedera-agent-kit",
   "version": "1.0.0",
