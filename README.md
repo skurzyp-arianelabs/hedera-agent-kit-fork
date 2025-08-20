@@ -57,6 +57,8 @@ Init and install with npm
 npm init -y
 ```
 
+> This command initializes a CommonJS project by default.
+
 ```bash
 npm install hedera-agent-kit @langchain/core langchain @hashgraph/sdk dotenv
 ```
@@ -416,7 +418,17 @@ node dist/index.js
 }
 ```
 
----
+### 7 - Option E: Try out the Hedera Agent Kit with ElizaOS
+
+ElizaOS is a powerful framework for building autonomous AI agents. The Hedera plugin for ElizaOS enables seamless integration with Hedera's blockchain services, allowing you to create sophisticated AI agents that can interact with the Hedera network.
+
+> ⚠️ **Development Status**: The ElizaOS plugin is currently in active development. Features and APIs may change as the plugin evolves.
+
+1. Clone the [Hedera ElizaOS Plugin Repository](https://github.com/hedera-dev/eliza-plugin-hedera/tree/feat/rework-v3)
+2. Install ElizaOS CLI
+3. Follow the [Hedera ElizaOS Plugin Docs](https://github.com/hedera-dev/eliza-plugin-hedera/tree/feat/rework-v3)
+
+
 ## About the Agent Kit
 
 ### Agent Execution Modes
@@ -450,7 +462,7 @@ Currently, the following plugins are available:
 To request more functionality in the toolkit for:
 * [Token Service](https://docs.hedera.com/hedera/sdks-and-apis/sdks/token-service)
 * [Consensus Service](https://docs.hedera.com/hedera/sdks-and-apis/sdks/consensus-service)
-* [Smart Contract Servce](https://docs.hedera.com/hedera/tutorials/smart-contracts)
+* [EVM / Smart Contract Servce](https://docs.hedera.com/hedera/tutorials/smart-contracts)
 
 Please [open an issue](https://github.com/hedera-dev/hedera-agent-kit/issues/new?template=toolkit_feature_request.yml&labels=feature-request).
 
