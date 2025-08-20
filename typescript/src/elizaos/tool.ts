@@ -20,6 +20,11 @@ import { customParseJSONObjectFromText } from '@/elizaos/utils/parser';
 
 class HederaAgentKitTool implements Action {
   description: string;
+  handler: Handler;
+  similes?: string[] | undefined;
+  examples?: ActionExample[][] | undefined;
+  name: string;
+  validate: Validator;
 
   constructor(client: Client, context: Context, tool: Tool) {
     const parameterSchema = tool.parameters;
@@ -113,11 +118,6 @@ class HederaAgentKitTool implements Action {
       }
     };
   }
-  handler: Handler;
-  similes?: string[] | undefined;
-  examples?: ActionExample[][] | undefined;
-  name: string;
-  validate: Validator;
 }
 
 export default HederaAgentKitTool;
