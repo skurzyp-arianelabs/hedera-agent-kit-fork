@@ -9,13 +9,17 @@ import {
   mintFungibleTokenParameters,
   mintNonFungibleTokenParameters,
 } from '@/shared/parameter-schemas/hts.zod';
-import { transferHbarParameters } from '@/shared/parameter-schemas/has.zod';
+import {
+  transferHbarParameters,
+  updateAccountParameters,
+  updateAccountParametersNormalised,
+} from '@/shared/parameter-schemas/has.zod';
 import {
   createTopicParameters,
   createTopicParametersNormalised,
 } from '@/shared/parameter-schemas/hcs.zod';
 
-import { Client, Hbar, PublicKey, TokenSupplyType, TokenType } from '@hashgraph/sdk';
+import { AccountId, Client, Hbar, PublicKey, TokenSupplyType, TokenType } from '@hashgraph/sdk';
 import { Context } from '@/shared/configuration';
 import z from 'zod';
 import {
@@ -398,6 +402,38 @@ export default class HederaParameterNormaliser {
       functionParameters,
       gas: 100_000,
     };
+  }
+
+  static normaliseUpdateAccount(
+    params: z.infer<ReturnType<typeof updateAccountParameters>>,
+    context: Context,
+    client: Client,
+  ) {
+    const accountId = AccountId.fromString(
+      AccountResolver.resolveAccount(params.accountId, context, client),
+    );
+
+    const normalised: z.infer<ReturnType<typeof updateAccountParametersNormalised>> = {
+      accountId,
+    } as any;
+
+    if (params.maxAutomaticTokenAssociations) {
+      normalised.maxAutomaticTokenAssociations = params.maxAutomaticTokenAssociations;
+    }
+    if (params.stakedAccountId) {
+      normalised.stakedAccountId = params.stakedAccountId;
+    }
+    if (params.accountMemo) {
+      normalised.accountMemo = params.accountMemo;
+    }
+    if (params.declineStakingReward) {
+      normalised.declineStakingReward = params.declineStakingReward;
+    }
+    if (params.autoRenewPeriod) {
+      normalised.autoRenewPeriod = params.autoRenewPeriod; // the number of seconds is acceptable
+    }
+
+    return normalised;
   }
 
   static async getHederaEVMAddress(
