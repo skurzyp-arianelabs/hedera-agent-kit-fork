@@ -245,18 +245,16 @@ export default class HederaParameterNormaliser {
   ) {
     const initialBalance = params.initialBalance ?? 0;
     const maxAssociations = params.maxAutomaticTokenAssociations ?? -1; // unlimited if -1
-    const defaultAccountId = AccountResolver.getDefaultAccount(context, client);
 
-    let publicKey: string | undefined;
+    // Try resolving the publicKey in priority order
+    let publicKey = params.publicKey
+      ?? client.operatorPublicKey?.toStringDer();
 
-    if (params.publicKey) {
-      publicKey = params.publicKey;
-    } else {
-      const account = await mirrorNode.getAccount(defaultAccountId);
-      if (account?.accountPublicKey) {
-        publicKey = account.accountPublicKey;
-      } else if (client.operatorPublicKey) {
-        publicKey = client.operatorPublicKey.toStringDer();
+    if (!publicKey) {
+      const defaultAccountId = AccountResolver.getDefaultAccount(context, client);
+      if (defaultAccountId) {
+        const account = await mirrorNode.getAccount(defaultAccountId);
+        publicKey = account?.accountPublicKey;
       }
     }
 

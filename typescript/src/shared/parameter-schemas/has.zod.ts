@@ -40,7 +40,7 @@ export const createAccountParameters = (_context: Context = {}) =>
     publicKey: z
       .string()
       .optional()
-      .describe('Account public key in DER format. If not provided, a public key of the operator will be used'),
+      .describe('Account public key. If not provided, a public key of the operator will be used'),
     accountMemo: z.string().optional().describe('Optional memo for the account'),
     initialBalance: z
       .number()
