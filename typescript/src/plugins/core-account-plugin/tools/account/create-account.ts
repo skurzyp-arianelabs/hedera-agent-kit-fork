@@ -18,15 +18,18 @@ ${contextSnippet}
 
 This tool will create a new Hedera account with a passed public key. If not passed, the tool will use operators public key.
 
-IMPORTANT: This is a sensitive action. To proceed, you must include the exact agreement string.
-
 Parameters:
-- publicKey (string, optional): Public key (in DER format) to use for the account. If not provided, the tool will use the operators public key.
+- publicKey (string, optional): Public key to use for the account. If not provided, the tool will use the operators public key.
 - accountMemo (string, optional): Optional memo for the account
 - initialBalance (number, optional, default 0): Initial HBAR to fund the account
 - maxAutomaticTokenAssociations (number, optional, default -1): -1 means unlimited
 ${usageInstructions}
 `;
+};
+
+const postProcess = (response: RawTransactionResponse) => {
+  const accountIdStr = response.accountId ? response.accountId.toString() : 'unknown';
+  return `Account created successfully.\nTransaction ID: ${response.transactionId}\nNew Account ID: ${accountIdStr}\n}`;
 };
 
 const createAccount = async (
@@ -47,12 +50,6 @@ const createAccount = async (
 
     // Build transaction
     const tx = HederaBuilder.createAccount(normalisedParams);
-
-    // Define a post-process to include keys
-    const postProcess = (response: RawTransactionResponse) => {
-      const accountIdStr = response.accountId ? response.accountId.toString() : 'unknown';
-      return `Account created successfully.\nTransaction ID: ${response.transactionId}\nNew Account ID: ${accountIdStr}\nPublic Key (DER): ${normalisedParams.key}}`;
-    };
 
     const result = await handleTransaction(tx, client, context, postProcess);
     return result;
