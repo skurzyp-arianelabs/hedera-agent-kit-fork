@@ -16,10 +16,11 @@ const updateAccountPrompt = (context: Context = {}) => {
   return `
 ${contextSnippet}
 
-This tool will update an existing Hedera account. All fields are optional; only provided fields will be updated.
+This tool will update an existing Hedera account. Only provided fields will be updated.
 
 Parameters:
 - ${accountDesc}
+- accountId (string, optional) Account ID to update (e.g., 0.0.xxxxx). If not provided, operator account ID will be used
 - maxAutomaticTokenAssociations (number, optional)
 - stakedAccountId (string, optional)
 - accountMemo (string, optional)

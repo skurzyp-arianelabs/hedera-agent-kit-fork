@@ -37,6 +37,7 @@ import {
   transferERC20Parameters,
   transferERC721Parameters,
   mintERC721Parameters,
+  createERC721Parameters,
 } from '@/shared/parameter-schemas/evm.zod';
 
 export default class HederaParameterNormaliser {
@@ -454,9 +455,6 @@ export default class HederaParameterNormaliser {
     }
     if (params.declineStakingReward) {
       normalised.declineStakingReward = params.declineStakingReward;
-    }
-    if (params.autoRenewPeriod) {
-      normalised.autoRenewPeriod = params.autoRenewPeriod; // the number of seconds is acceptable
     }
 
     return normalised;

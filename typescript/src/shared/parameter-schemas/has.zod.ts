@@ -38,7 +38,7 @@ export const transferHbarParametersNormalised = (_context: Context = {}) =>
 export const updateAccountParameters = (_context: Context = {}) =>
   z.object({
     // If not passed, will be injected from context in normalisation
-    accountId: z.string().optional().describe('Account ID to update (e.g., 0.0.xxxxx)'),
+    accountId: z.string().optional().describe('Account ID to update (e.g., 0.0.xxxxx). If not provided, operator account ID will be used'),
 
     maxAutomaticTokenAssociations: z
       .number()
