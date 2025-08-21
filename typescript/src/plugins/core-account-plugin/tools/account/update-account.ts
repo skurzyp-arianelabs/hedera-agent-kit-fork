@@ -24,7 +24,6 @@ Parameters:
 - stakedAccountId (string, optional)
 - accountMemo (string, optional)
 - declineStakingReward (boolean, optional)
-- autoRenewPeriod (number, optional, seconds)
 ${usageInstructions}
 `;
 };

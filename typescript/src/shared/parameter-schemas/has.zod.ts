@@ -40,7 +40,6 @@ export const updateAccountParameters = (_context: Context = {}) =>
     // If not passed, will be injected from context in normalisation
     accountId: z.string().optional().describe('Account ID to update (e.g., 0.0.xxxxx)'),
 
-    // Optional update fields
     maxAutomaticTokenAssociations: z
       .number()
       .int()
@@ -49,12 +48,6 @@ export const updateAccountParameters = (_context: Context = {}) =>
     stakedAccountId: z.string().optional().describe('Staked account ID'),
     accountMemo: z.string().optional().describe('Account memo'),
     declineStakingReward: z.boolean().optional().describe('Decline staking rewards'),
-    autoRenewPeriod: z
-      .number()
-      .int()
-      .positive()
-      .optional()
-      .describe('Auto renew period in seconds'),
   });
 
 export const updateAccountParametersNormalised = (_context: Context = {}) =>
@@ -64,5 +57,4 @@ export const updateAccountParametersNormalised = (_context: Context = {}) =>
     stakedAccountId: z.union([z.string(), z.instanceof(AccountId)]).optional(),
     accountMemo: z.string().optional(),
     declineStakingReward: z.boolean().optional(),
-    autoRenewPeriod: z.union([z.number(), z.instanceof(Long)]).optional(),
   });
