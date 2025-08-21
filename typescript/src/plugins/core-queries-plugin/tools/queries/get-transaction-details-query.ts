@@ -32,23 +32,28 @@ const postProcess = (transactionDetails: TransactionDetailsResponse, transaction
     return `No transaction details found for transaction ID: ${transactionId}`;
   }
 
-  const tx = transactionDetails.transactions[0];
+  const results = transactionDetails.transactions.map((tx, index) => {
+    let transfersInfo = '';
+    if (tx.transfers && tx.transfers.length > 0) {
+      transfersInfo = '\nTransfers:\n' + tx.transfers.map(transfer => 
+        `  Account: ${transfer.account}, Amount: ${toDisplayUnit(transfer.amount, 8)}ℏ`
+      ).join('\n');
+    }
 
-  let transfersInfo = '';
-  if (tx.transfers && tx.transfers.length > 0) {
-    transfersInfo = '\nTransfers:\n' + tx.transfers.map(transfer => 
-      `  Account: ${transfer.account}, Amount: ${toDisplayUnit(transfer.amount, 8)}ℏ`
-    ).join('\n');
-  }
+    const transactionHeader = transactionDetails.transactions.length > 1 
+      ? `Transaction ${index + 1} Details for ${transactionId}`
+      : `Transaction Details for ${transactionId}`;
 
-  return `Transaction Details for ${transactionId}
-` +
-    `Status: ${tx.result}\n` +
-    `Consensus Timestamp: ${tx.consensus_timestamp}\n` +
-    `Transaction Hash: ${tx.transaction_hash}\n` +
-    `Transaction Fee: ${tx.charged_tx_fee}\n` +
-    `Type: ${tx.name}\n` +
-    `Entity ID: ${tx.entity_id}${transfersInfo}`;
+    return `${transactionHeader}
+Status: ${tx.result}
+Consensus Timestamp: ${tx.consensus_timestamp}
+Transaction Hash: ${tx.transaction_hash}
+Transaction Fee: ${tx.charged_tx_fee}
+Type: ${tx.name}
+Entity ID: ${tx.entity_id}${transfersInfo}`;
+  });
+
+  return results.join('\n\n' + '='.repeat(50) + '\n\n');
 };
 
 export const getTransactionDetailsQuery = async (
