@@ -37,6 +37,7 @@ import {
   transferERC20Parameters,
   transferERC721Parameters,
   mintERC721Parameters,
+  createERC721Parameters,
 } from '@/shared/parameter-schemas/evm.zod';
 
 export default class HederaParameterNormaliser {
@@ -236,19 +237,37 @@ export default class HederaParameterNormaliser {
     return normalised;
   }
 
-  static normaliseCreateAccount(
+  static async normaliseCreateAccount(
     params: z.infer<ReturnType<typeof createAccountParameters>>,
-    _context: Context,
-    _client: Client,
-    generatedPublicKey: string,
+    context: Context,
+    client: Client,
+    mirrorNode: IHederaMirrornodeService,
   ) {
     const initialBalance = params.initialBalance ?? 0;
-    const maxAssociations = params.maxAutomaticTokenAssociations ?? -1; // sets max auto token associations to unlimited
+    const maxAssociations = params.maxAutomaticTokenAssociations ?? -1; // unlimited if -1
+    const defaultAccountId = AccountResolver.getDefaultAccount(context, client);
+
+    let publicKey: string | undefined;
+
+    if (params.publicKey) {
+      publicKey = params.publicKey;
+    } else {
+      const account = await mirrorNode.getAccount(defaultAccountId);
+      if (account?.accountPublicKey) {
+        publicKey = account.accountPublicKey;
+      } else if (client.operatorPublicKey) {
+        publicKey = client.operatorPublicKey.toStringDer();
+      }
+    }
+
+    if (!publicKey) {
+      throw new Error("Unable to resolve public key: no param, mirror node, or client operator key available.");
+    }
 
     const normalised: z.infer<ReturnType<typeof createAccountParametersNormalised>> = {
       accountMemo: params.accountMemo,
       initialBalance,
-      key: PublicKey.fromString(generatedPublicKey),
+      key: PublicKey.fromString(publicKey),
       maxAutomaticTokenAssociations: maxAssociations,
     };
 

@@ -1,14 +1,13 @@
 import { z } from 'zod';
 import type { Context } from '@/shared/configuration';
 import type { Tool } from '@/shared/tools';
-import { Client, LedgerId, PrivateKey } from '@hashgraph/sdk';
+import { Client } from '@hashgraph/sdk';
 import { handleTransaction, RawTransactionResponse } from '@/shared/strategies/tx-mode-strategy';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { createAccountParameters } from '@/shared/parameter-schemas/has.zod';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';
 import { PromptGenerator } from '@/shared/utils/prompt-generator';
-
-const AGREEMENT_TEXT = 'I understand that this action can be risky.';
+import { getMirrornodeService } from '@/shared/hedera-utils/mirrornode/hedera-mirrornode-utils';
 
 const createAccountPrompt = (context: Context = {}) => {
   const contextSnippet = PromptGenerator.getContextSnippet(context);
@@ -17,13 +16,12 @@ const createAccountPrompt = (context: Context = {}) => {
   return `
 ${contextSnippet}
 
-This tool will create a new Hedera account with a newly generated key.
+This tool will create a new Hedera account with a passed public key. If not passed, the tool will use operators public key.
 
 IMPORTANT: This is a sensitive action. To proceed, you must include the exact agreement string.
 
 Parameters:
-- agreement (string, required): Must be exactly: "${AGREEMENT_TEXT}"
-- keyType (enum, required): One of: ECDSA | ED25519. Determines the key type to generate for the account
+- publicKey (string, optional): Public key (in DER format) to use for the account. If not provided, the tool will use the operators public key.
 - accountMemo (string, optional): Optional memo for the account
 - initialBalance (number, optional, default 0): Initial HBAR to fund the account
 - maxAutomaticTokenAssociations (number, optional, default -1): -1 means unlimited
@@ -37,29 +35,14 @@ const createAccount = async (
   params: z.infer<ReturnType<typeof createAccountParameters>>,
 ) => {
   try {
-    // Block on mainnet
-    if (client.ledgerId === LedgerId.MAINNET) {
-      return 'This action is not currently supported on the mainnet.';
-    }
-
-    // Validate agreement
-    if (params.agreement !== AGREEMENT_TEXT) {
-      return 'The agreement must match exactly: "I understand that this action can be risky."';
-    }
-
-    // Generate key pair
-    const privKey =
-      params.keyType === 'ECDSA'
-        ? PrivateKey.generateECDSA()
-        : PrivateKey.generateED25519();
-    const pubKey = privKey.publicKey.toStringDer();
+    const mirrornodeService = getMirrornodeService(context.mirrornodeService!, client.ledgerId!);
 
     // Normalise params to match AccountCreateTransaction props
-    const normalisedParams = HederaParameterNormaliser.normaliseCreateAccount(
+    const normalisedParams = await HederaParameterNormaliser.normaliseCreateAccount(
       params,
       context,
       client,
-      pubKey,
+      mirrornodeService,
     );
 
     // Build transaction
@@ -68,7 +51,7 @@ const createAccount = async (
     // Define a post-process to include keys
     const postProcess = (response: RawTransactionResponse) => {
       const accountIdStr = response.accountId ? response.accountId.toString() : 'unknown';
-      return `Account created successfully.\nTransaction ID: ${response.transactionId}\nNew Account ID: ${accountIdStr}\nPublic Key (DER): ${pubKey}\nPrivate Key (DER): ${privKey.toStringDer()}`;
+      return `Account created successfully.\nTransaction ID: ${response.transactionId}\nNew Account ID: ${accountIdStr}\nPublic Key (DER): ${normalisedParams.key}}`;
     };
 
     const result = await handleTransaction(tx, client, context, postProcess);

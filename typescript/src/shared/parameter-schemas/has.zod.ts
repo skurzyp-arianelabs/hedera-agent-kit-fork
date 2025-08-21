@@ -1,6 +1,6 @@
 import { Context } from '@/shared/configuration';
 import { z } from 'zod';
-import { AccountId, Hbar } from '@hashgraph/sdk';
+import { AccountId, Hbar, Key } from '@hashgraph/sdk';
 import BigNumber from 'bignumber.js';
 import Long from 'long';
 
@@ -37,10 +37,10 @@ export const transferHbarParametersNormalised = (_context: Context = {}) =>
 
 export const createAccountParameters = (_context: Context = {}) =>
   z.object({
-    agreement: z
+    publicKey: z
       .string()
-      .describe('You must include exactly: "I understand that this action can be risky."'),
-    keyType: z.enum(['ECDSA', 'ED25519']).describe('Type of key to generate for the new account'),
+      .optional()
+      .describe('Account public key in DER format. If not provided, a public key of the operator will be used'),
     accountMemo: z.string().optional().describe('Optional memo for the account'),
     initialBalance: z
       .number()
@@ -58,7 +58,7 @@ export const createAccountParameters = (_context: Context = {}) =>
 export const createAccountParametersNormalised = (_context: Context = {}) =>
   z.object({
     accountMemo: z.string().optional(),
-    initialBalance: z.union([z.string(), z.number(), z.instanceof(Long), z.instanceof(BigNumber), z.instanceof(Hbar)]).optional(),
-    key: z.any().optional(),
+    initialBalance: z.union([z.string(), z.number()]).optional(),
+    key: z.instanceof(Key).optional(),
     maxAutomaticTokenAssociations: z.union([z.number(), z.instanceof(Long)]).optional(),
   });

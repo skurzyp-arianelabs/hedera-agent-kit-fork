@@ -26,7 +26,7 @@ This plugin provides tools for Hedera Account Service operations
 | Tool Name             | Description                             | Usage                                                                                                                               |
 |-----------------------|-----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
 | `TRANSFER_HBAR_TOOL`  | Transfer HBAR between accounts          | Provide the amount of of HBAR to transfer, the account to transfer to, and optionally, a transaction memo.                          |
-| `CREATE_ACCOUNT_TOOL` | Creates new key pair and hedera account | Provide agreement text, type of key that should be generated, and optionally account memo, initial balance and max auto association |
+| `CREATE_ACCOUNT_TOOL` | Creates new hedera account, either for a provided public key, or for the keypair provided in the operator account | Provide agreement text, type of key that should be generated, and optionally account memo, initial balance and max auto association |
 
 ### Core Hedera Consensus Service Plugin Tools (core-consensus-plugin)
 
